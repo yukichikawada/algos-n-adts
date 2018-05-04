@@ -16,7 +16,7 @@ describe QuickSort do
       pivot_idx = QuickSort.partition(arr, 4, 4)
       # Should not touch left half of the array
       expect(arr[0...4]).to eq([4, 3, 2, 1])
-
+      # [5, 7]
       expect(arr[4] && arr[5]).to be < arr[6]
       expect(arr[7]).to be > arr[6]
       expect(pivot_idx).to eq(6)
