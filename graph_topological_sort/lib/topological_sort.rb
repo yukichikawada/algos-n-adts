@@ -5,7 +5,11 @@ require_relative 'graph'
 def topological_sort(vertices)
   queue = []
   sorted = []
+  # keep track of vertex in_edges count so that
+  # it doesnt get prematurely pushed into queue
   count = {}
+
+  # find started vertexes
   vertices.each do |vertex|
     queue.push(vertex) if vertex.in_edges.empty?
     count[vertex] = vertex.in_edges.count
@@ -21,5 +25,5 @@ def topological_sort(vertices)
     end
   end
 
-  sorted.length == vertices.length ? sorted : []
+  sorted.count == vertices.count ? sorted : []
 end
