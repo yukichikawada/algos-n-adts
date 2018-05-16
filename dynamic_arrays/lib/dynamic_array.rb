@@ -23,36 +23,55 @@ class DynamicArray
 
   # O(1)
   def pop
+    raise "index out of bounds" if @length == 0
     @store = @store[0...-1]
+    @length -= 1
   end
 
   # O(1) ammortized; O(n) worst case. Variable because of the possible
   # resize.
   def push(val)
-    idx = @length
-    # self.check_index(idx)
-    @store[idx]= val
+    resize! if @length == @capacity
+    @store[@length] = val
+    @length += 1
   end
 
   # O(n): has to shift over all the elements.
   def shift
-    check_index(@length)
+    raise "index out of bounds" if @length == 0
+    @length -= 1
+    @length.times do |idx|
+      @store[idx] = @store[idx + 1]
+    end
   end
 
   # O(n): has to shift over all the elements.
   def unshift(val)
-    check_index(@length)
+    resize! if @length == @capacity
+    @length += 1
+    @length.downto(1) do |idx|
+      @store[idx] = @store[idx - 1]
+    end
+    @store[0] = val
   end
 
   protected
+  
   attr_accessor :capacity, :store
   attr_writer :length
 
   def check_index(index)
-    raise "index out of bounds" if index > @length - 1
+    raise "index out of bounds" if index >= @length
   end
 
   # O(n): has to copy over all the elements to the new store.
   def resize!
+    previous_store = @store
+    @capacity *= 2
+    @store = StaticArray.new(@capacity)
+
+    @length.times do |idx|
+      @store[idx] = previous_store[idx]
+    end
   end
 end
